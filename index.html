@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicholas Trabulsi — 3D Game Artist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 0 3rem; padding-top: 80px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 55% 55% at 68% 50%, rgba(200,169,110,0.055) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 15% 80%, rgba(90,80,140,0.07) 0%, transparent 60%); }
+    .hero-eyebrow { font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both; }
+    .hero-name { font-family: var(--font-display); font-size: clamp(5rem, 12vw, 10rem); line-height: 0.88; letter-spacing: 0.02em; margin-bottom: 1.75rem; animation: fadeUp 0.7s 0.1s ease both; }
+    .hero-sub { font-size: clamp(1rem, 1.8vw, 1.2rem); color: var(--text-muted); font-weight: 300; max-width: 460px; margin-bottom: 2.75rem; animation: fadeUp 0.7s 0.2s ease both; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.3s ease both; }
+    .hero-scroll-hint { position: absolute; bottom: 2.5rem; left: 3rem; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 0.75rem; }
+    .hero-scroll-hint::after { content: ''; display: block; width: 36px; height: 1px; background: var(--text-muted); }
+
+    #work { border-top: 1px solid var(--border); }
+    .work-intro { max-width: 520px; margin-bottom: 4rem; }
+    .work-intro .section-title { margin-bottom: 0.75rem; }
+    .work-intro p { font-size: 0.9rem; color: var(--text-muted); font-weight: 300; line-height: 1.7; }
+
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .project-card { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); transition: border-color 0.3s; }
+    .project-card:hover { border-color: rgba(255,255,255,0.14); }
+    .project-card:hover .card-img img { transform: scale(1.05); }
+    .project-card:hover .card-arrow { transform: translateX(4px); }
+    .card-img { aspect-ratio: 16/9; overflow: hidden; background: var(--surface); }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .card-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+    .card-num { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+    .card-client { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+    .card-title { font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.05em; line-height: 1.05; margin-bottom: 0.5rem; }
+    .card-desc { font-size: 0.82rem; color: var(--text-muted); font-weight: 300; line-height: 1.6; margin-bottom: 1rem; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .tag { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); padding: 0.2rem 0.55rem; }
+    .card-arrow { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); transition: transform 0.2s; }
+
+    @media (max-width: 900px) { .project-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .hero { padding-left: 1.5rem; padding-right: 1.5rem; } .hero-scroll-hint { left: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-name">Nicholas Trabulsi</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Work</a></li><li><a href="index.html#about">About</a></li><li><a href="index.html#contact">Contact</a></li>
+        <li><a href="https://www.artstation.com/YOURUSERNAME" target="_blank" class="nav-cta">ArtStation &#8599;</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <p class="hero-eyebrow">3D Game Artist &#8212; Characters &amp; Hard Surface</p>
+    <h1 class="hero-name">Nicholas<br>Trabulsi</h1>
+    <p class="hero-sub">Building game-ready characters and hard surface assets for real-time engines. Shipped on Steam.</p>
+    <div class="hero-ctas">
+        <a href="#work" class="btn-primary">View My Work</a>
+        <a href="https://www.youtube.com/watch?v=YOURREEL" target="_blank" class="btn-ghost">Watch Reel &#8599;</a>
+    </div>
+    <div class="hero-scroll-hint">Scroll to explore</div>
+</section>
+
+<section id="work">
+    <div class="work-intro">
+        <p class="eyebrow">Selected Work</p>
+        <h2 class="section-title">Portfolio</h2>
+        <p>Game-ready assets built across Unity URP and Unreal Engine 5. Click any project to see the full breakdown.</p>
+    </div>
+
+    <div class="project-grid">
+
+        <a href="project-01.html" class="project-card fade-up">
+            <div class="card-img"><img src="img-revolver-hero.jpg" alt="Chiappa Rhino 200DS"></div>
+            <div class="card-body">
+                <div class="card-meta">
+                    <span class="card-num">01</span>
+                    <span class="card-client">Unreleased Title</span>
+                </div>
+                <h2 class="card-title">Chiappa Rhino 200DS</h2>
+                <p class="card-desc">Hero weapon prop with articulating cylinder, ejector, and hammer. Built for real-time use in Unity URP.</p>
+                <div class="card-footer">
+                    <div class="card-tags">
+                        <span class="tag">Hard Surface</span>
+                        <span class="tag">Unity URP</span>
+                        <span class="tag">7,273 tris</span>
+                    </div>
+                    <span class="card-arrow">View &#8599;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="project-02.html" class="project-card fade-up">
+            <div class="card-img"><img src="img-enemy-hero.jpg" alt="Crawling Enemy"></div>
+            <div class="card-body">
+                <div class="card-meta">
+                    <span class="card-num">02</span>
+                    <span class="card-client">Path of Light</span>
+                </div>
+                <h2 class="card-title">Crawling Enemy</h2>
+                <p class="card-desc">Creature asset shipped in an indie title on Steam. Sculpted in ZBrush, rigged and integrated in Unreal Engine 5.</p>
+                <div class="card-footer">
+                    <div class="card-tags">
+                        <span class="tag">Character</span>
+                        <span class="tag">Unreal Engine 5</span>
+                        <span class="tag">9,466 tris</span>
+                    </div>
+                    <span class="card-arrow">View &#8599;</span>
+                </div>
+            </div>
+        </a>
+
+        <a href="project-03.html" class="project-card fade-up">
+            <div class="card-img"><img src="img-avatars.jpg" alt="Stylized Avatars"></div>
+            <div class="card-body">
+                <div class="card-meta">
+                    <span class="card-num">03</span>
+                    <span class="card-client">Unreleased Project</span>
+                </div>
+                <h2 class="card-title">Stylized Avatars</h2>
+                <p class="card-desc">Three low-poly stylized character avatars commissioned for content creators, each designed to their likeness and brief.</p>
+                <div class="card-footer">
+                    <div class="card-tags">
+                        <span class="tag">Character</span>
+                        <span class="tag">Low-Poly</span>
+                        <span class="tag">1,006&ndash;1,624 tris</span>
+                    </div>
+                    <span class="card-arrow">View &#8599;</span>
+                </div>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+<section id="about" style="border-top: 1px solid var(--border); background: var(--surface);">
+    <p class="eyebrow">About</p>
+    <div class="about-layout">
+        <div>
+            <h2 class="section-title">A bit<br>about me</h2>
+            <div class="about-bio">
+                <p>I'm a 3D game artist focused on character and hard surface asset creation for real-time engines. My work has shipped on Steam through <em>Path of Light</em>, and I've built assets across both Unity URP and Unreal Engine 5 pipelines.</p>
+                <p>I care about clean retopology, efficient UV layouts, and PBR texturing that holds up at gameplay distances &#8212; not just in a render.</p>
+                <p>Currently looking for entry-level opportunities in game development.</p>
+            </div>
+        </div>
+        <div>
+            <p class="skills-label">Software &amp; Skills</p>
+            <div class="skills-list">
+                <div class="skill">Blender</div>
+                <div class="skill">ZBrush</div>
+                <div class="skill">Substance Painter</div>
+                <div class="skill">Unreal Engine 5</div>
+                <div class="skill">Unity URP</div>
+                <div class="skill">Iray</div>
+                <div class="skill">Retopology</div>
+                <div class="skill">UV Unwrapping</div>
+                <div class="skill">PBR Texturing</div>
+                <div class="skill">Hard Surface</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" style="border-top: 1px solid var(--border); text-align: center;">
+    <p class="eyebrow">Contact</p>
+    <h2 class="section-title">Let's work<br>together</h2>
+    <a href="mailto:nicholasstrabulsi@gmaill.com" class="contact-email">nicholasstrabulsi@gmaill.com</a>
+    <div class="social-links">
+        <a href="https://www.artstation.com/YOURUSERNAME" target="_blank" class="social-link">ArtStation &#8599;</a>
+        <a href="https://www.linkedin.com/in/YOURPROFILE" target="_blank" class="social-link">LinkedIn &#8599;</a>
+        <a href="https://store.steampowered.com/app/3565990/Path_of_Light/" target="_blank" class="social-link">Path of Light &#8599;</a>
+    </div>
+</section>
+
+<footer>
+    <span>&copy; 2026 Nicholas Trabulsi</span>
+    <span>3D Game Artist &#8212; Characters &amp; Hard Surface</span>
+</footer>
+
+<div class="lb-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lb-close" onclick="closeLb()">&#10005;</button>
+    <button class="lb-arrow prev" onclick="event.stopPropagation(); navLb(-1)">&#8592;</button>
+    <div class="lb-img-wrap" onclick="event.stopPropagation()">
+        <img id="lb-img" src="" alt="">
+    </div>
+    <p class="lb-caption" id="lb-caption"></p>
+    <button class="lb-arrow next" onclick="event.stopPropagation(); navLb(1)">&#8594;</button>
+    <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

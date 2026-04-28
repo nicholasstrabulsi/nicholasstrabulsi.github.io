@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crawling Enemy — Nicholas Trabulsi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .project-page { padding: 8rem 3rem 6rem; max-width: 1100px; margin: 0 auto; }
+    .project-page-header { margin-bottom: 3rem; }
+    .project-page-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .project-page-title { font-family: var(--font-display); font-size: clamp(2.8rem, 6vw, 5rem); letter-spacing: 0.04em; line-height: 0.95; margin-bottom: 1rem; }
+    .project-page-desc { font-size: 1rem; color: rgba(236,232,225,0.78); font-weight: 300; line-height: 1.85; max-width: 640px; }
+    @media (max-width: 640px) { .project-page { padding-left: 1.5rem; padding-right: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-name">Nicholas Trabulsi</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Work</a></li><li><a href="index.html#about">About</a></li><li><a href="index.html#contact">Contact</a></li>
+        <li><a href="https://www.artstation.com/YOURUSERNAME" target="_blank" class="nav-cta">ArtStation &#8599;</a></li>
+    </ul>
+</nav>
+
+<main class="project-page">
+    <a href="index.html" class="btn-back">&#8592; All Work</a>
+
+    <div class="project-page-header" style="margin-top: 2rem;">
+        <div class="project-page-meta">
+            <span class="eyebrow" style="margin:0;">02</span>
+            <span style="font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted);">Path of Light</span>
+            <span class="badge-shipped">Shipped on Steam</span>
+        </div>
+        <h1 class="project-page-title">Crawling Enemy</h1>
+        <p class="project-page-desc">This character was created for <em>Path of Light</em>, an adventure indie title currently published on Steam. I worked closely with our team's concept artist to realize their vision, sculpting the high-poly model in ZBrush before retopologizing and rigging it in Blender. Getting the rig to work correctly in Unreal Engine 5 posed a unique challenge &#8212; Blender and Unreal use different bone axis conventions, and I developed a workflow using third-party tools to correct the bone orientations on export so the rig behaved properly in-engine. The final model was textured in Substance Painter.</p>
+        <a href="https://store.steampowered.com/app/3565990/Path_of_Light/" target="_blank" class="ext-link" style="margin-top: 1rem; display: inline-flex;">View Path of Light on Steam &#8599;</a>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="pipeline-strip" style="margin-top: 1.25rem;">
+        <div class="pipeline-step"><div class="pipeline-step-role">Sculpt</div><div class="pipeline-step-tool">ZBrush</div></div>
+        <div class="pipeline-step"><div class="pipeline-step-role">Retopo &amp; Rig</div><div class="pipeline-step-tool">Blender</div></div>
+        <div class="pipeline-step"><div class="pipeline-step-role">Texturing</div><div class="pipeline-step-tool">Substance Painter</div></div>
+        <div class="pipeline-step"><div class="pipeline-step-role">Engine</div><div class="pipeline-step-tool">Unreal Engine 5</div></div>
+        <div class="pipeline-step"><div class="pipeline-step-role">Render</div><div class="pipeline-step-tool">Iray</div></div>
+    </div>
+
+    <div class="shot-hero fade-up" onclick="openLightbox(this)">
+        <img src="img-enemy-hero.jpg" alt="Crawling enemy beauty render">
+        <div class="shot-label"><span class="shot-label-text">Beauty Render &#8212; Iray</span></div>
+    </div>
+
+    <div class="shot-row-2">
+        <div class="shot-card fade-up" onclick="openLightbox(this)">
+            <img src="img-enemy-wire.jpg" alt="Character wireframe &#8212; three angles">
+            <div class="shot-label"><span class="shot-label-text">Low-Poly Wireframe</span></div>
+        </div>
+    </div>
+
+    <div class="stats-strip fade-up" style="margin-top: 1.25rem;">
+        <div class="stat"><div class="stat-label">Triangle Count</div><div class="stat-value">9,466</div></div>
+        <div class="stat"><div class="stat-label">Texture Resolution</div><div class="stat-value">2K</div></div>
+        <div class="stat"><div class="stat-label">Engine</div><div class="stat-value">Unreal Engine 5</div></div>
+        <div class="stat"><div class="stat-label">Published</div><div class="stat-value">Steam</div></div>
+    </div>
+
+</main>
+
+<footer>
+    <span>&copy; 2026 Nicholas Trabulsi</span>
+    <span>3D Game Artist &#8212; Characters &amp; Hard Surface</span>
+</footer>
+
+<div class="lb-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lb-close" onclick="closeLb()">&#10005;</button>
+    <button class="lb-arrow prev" onclick="event.stopPropagation(); navLb(-1)">&#8592;</button>
+    <div class="lb-img-wrap" onclick="event.stopPropagation()">
+        <img id="lb-img" src="" alt="">
+    </div>
+    <p class="lb-caption" id="lb-caption"></p>
+    <button class="lb-arrow next" onclick="event.stopPropagation(); navLb(1)">&#8594;</button>
+    <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
