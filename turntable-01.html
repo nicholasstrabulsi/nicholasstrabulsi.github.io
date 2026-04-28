@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chiappa Rhino 200DS — 3D Viewer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; }
+
+    #canvas-wrap {
+      width: 100%; height: 100%; position: relative;
+    }
+
+    canvas { display: block; width: 100% !important; height: 100% !important; }
+
+    /* Loading overlay */
+    #loader {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: #0a0a0a; z-index: 10;
+      gap: 1rem;
+      transition: opacity 0.5s ease;
+    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+
+    .loader-bar-wrap {
+      width: 160px; height: 1px;
+      background: rgba(255,255,255,0.08);
+      position: relative; overflow: hidden;
+    }
+    .loader-bar {
+      height: 100%; background: #c8a96e;
+      width: 0%; transition: width 0.2s ease;
+    }
+    .loader-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: #6e6b66;
+    }
+
+    /* Controls hint */
+    #hint {
+      position: absolute; bottom: 1rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.6rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(110,107,102,0.6);
+      white-space: nowrap;
+      animation: fadeHint 3s 2s ease forwards;
+    }
+    @keyframes fadeHint { from { opacity: 1; } to { opacity: 0; } }
+
+    /* Error state */
+    #error {
+      display: none; position: absolute; inset: 0;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.75rem;
+      background: #0a0a0a;
+    }
+    #error.show { display: flex; }
+    #error p {
+      font-family: monospace; font-size: 0.75rem;
+      color: #6e6b66; letter-spacing: 0.1em;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="canvas-wrap">
+  <div id="loader">
+    <div class="loader-label">Loading model</div>
+    <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
+  </div>
+  <div id="hint">Drag to rotate &nbsp;·&nbsp; Scroll to zoom</div>
+  <div id="error">
+    <p>Could not load Rhino.glb</p>
+    <p>Make sure the file is in the same folder as this page.</p>
+  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RGBELoader }    from 'three/addons/loaders/RGBELoader.js';
+
+// ── Scene ────────────────────────────────────────────────────────────────────
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+document.getElementById('canvas-wrap').appendChild(renderer.domElement);
+
+const scene  = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0a);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 0.01, 100);
+camera.position.set(0, 0.05, 0.55);
+
+// ── Controls ─────────────────────────────────────────────────────────────────
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping    = true;
+controls.dampingFactor    = 0.06;
+controls.autoRotate       = true;
+controls.autoRotateSpeed  = 1.2;
+controls.enablePan        = false;
+controls.minDistance      = 0.2;
+controls.maxDistance      = 1.5;
+controls.minPolarAngle    = Math.PI * 0.25;
+controls.maxPolarAngle    = Math.PI * 0.75;
+controls.target.set(0, 0, 0);
+
+// ── Lighting ─────────────────────────────────────────────────────────────────
+// Warm key light (top-front-right)
+const key = new THREE.DirectionalLight(0xffe4c4, 3.5);
+key.position.set(1.5, 2, 1.5);
+key.castShadow = true;
+key.shadow.mapSize.set(1024, 1024);
+scene.add(key);
+
+// Cool fill light (left)
+const fill = new THREE.DirectionalLight(0xadc8ff, 1.2);
+fill.position.set(-2, 0.5, 0.5);
+scene.add(fill);
+
+// Rim light (back)
+const rim = new THREE.DirectionalLight(0xffffff, 1.8);
+rim.position.set(0, 0.5, -2);
+scene.add(rim);
+
+// Subtle ambient
+const amb = new THREE.AmbientLight(0xffffff, 0.18);
+scene.add(amb);
+
+// ── Load model ───────────────────────────────────────────────────────────────
+const loader   = new GLTFLoader();
+const loaderEl = document.getElementById('loader');
+const barEl    = document.getElementById('loader-bar');
+const errorEl  = document.getElementById('error');
+
+loader.load(
+  'Rhino.glb',
+
+  // onLoad
+  function(gltf) {
+    const model = gltf.scene;
+
+    // Centre and scale to fit
+    const box    = new THREE.Box3().setFromObject(model);
+    const size   = box.getSize(new THREE.Vector3());
+    const centre = box.getCenter(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale  = 0.38 / maxDim;
+    model.scale.setScalar(scale);
+    model.position.sub(centre.multiplyScalar(scale));
+
+    // Shadows
+    model.traverse(function(child) {
+      if (child.isMesh) {
+        child.castShadow    = true;
+        child.receiveShadow = true;
+        // Boost metalness/roughness if no textures detected
+        if (child.material && !child.material.map) {
+          child.material.metalness = Math.max(child.material.metalness || 0, 0.6);
+          child.material.roughness = Math.min(child.material.roughness || 1, 0.4);
+        }
+      }
+    });
+
+    scene.add(model);
+
+    // Hide loader
+    loaderEl.classList.add('hidden');
+    setTimeout(function() { loaderEl.style.display = 'none'; }, 600);
+  },
+
+  // onProgress
+  function(xhr) {
+    if (xhr.lengthComputable) {
+      barEl.style.width = ((xhr.loaded / xhr.total) * 100) + '%';
+    }
+  },
+
+  // onError
+  function(err) {
+    console.error('GLB load error:', err);
+    loaderEl.style.display = 'none';
+    errorEl.classList.add('show');
+  }
+);
+
+// ── Resize ───────────────────────────────────────────────────────────────────
+function resize() {
+  const w = renderer.domElement.parentElement.clientWidth;
+  const h = renderer.domElement.parentElement.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ── Render loop ──────────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+
+</body>
+</html>
